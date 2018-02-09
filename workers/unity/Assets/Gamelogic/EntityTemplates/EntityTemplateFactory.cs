@@ -55,5 +55,31 @@ namespace Assets.Gamelogic.EntityTemplates
 
             return cubeTemplate;
         }
+
+        public static Entity CreateTileTemplate(Vector3 position)
+        {
+            var tileTemplate = EntityBuilder.Begin()
+                .AddPositionComponent(position, CommonRequirementSets.PhysicsOnly)
+                .AddMetadataComponent(entityType: SimulationSettings.TilePrefabName)
+                .SetPersistence(true)
+                .SetReadAcl(CommonRequirementSets.PhysicsOrVisual)
+                .AddComponent(new Improbable.Demo.Color.Data(0), CommonRequirementSets.PhysicsOnly)
+                .Build();
+
+            return tileTemplate;
+        }
+
+        public static Entity CreateMoverTemplate(Vector3 position)
+        {
+            var moverTemplate = EntityBuilder.Begin()
+                .AddPositionComponent(position, CommonRequirementSets.PhysicsOnly)
+                .AddMetadataComponent(entityType: SimulationSettings.MoverPrefabName)
+                .SetPersistence(true)
+                .SetReadAcl(CommonRequirementSets.PhysicsOrVisual)
+                .AddComponent(new Improbable.Demo.Color.Data(0), CommonRequirementSets.PhysicsOnly)
+                .Build();
+
+            return moverTemplate;
+        }
     }
 }

@@ -1,0 +1,6 @@
+package improbable.demo;
+
+component Color {
+  id = 2001;
+  uint32 color_id = 1;
+}

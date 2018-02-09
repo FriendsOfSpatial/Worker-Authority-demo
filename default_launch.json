@@ -1,23 +1,40 @@
 {
   "template": "small",
   "world": {
-    "chunkEdgeLengthMeters": 50,
+    "chunkEdgeLengthMeters": 10,
     "snapshots": {
       "snapshotWritePeriodSeconds": 0
     },
     "dimensions": {
-      "xMeters": 1500,
-      "zMeters": 1500
+      "xMeters": 600,
+      "zMeters": 600
     }
   },
   "workers": [
     {
       "worker_type": "UnityWorker",
       "load_balancing": {
-        "auto_hex_grid": {
-          "num_workers": 1
-         }
-      },
+		"points_of_interest": {
+			"num_workers": 4,
+			"points": [
+				{
+					"x": -1,
+					"z": -1
+				},
+				{
+					"x": -1,
+					"z": 1
+				},
+				{
+					"x": 1,
+					"z": -1
+				},
+				{
+					"x": 1,
+					"z": 1
+				}]
+			}
+		},
       "permissions": [{
         "entity_creation": {
           "allow": true

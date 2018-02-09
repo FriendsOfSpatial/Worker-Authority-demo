@@ -18,9 +18,27 @@ namespace Assets.Editor
 			var currentEntityId = 1;
 
 			snapshotEntities.Add(new EntityId(currentEntityId++), EntityTemplateFactory.CreatePlayerCreatorTemplate());
-			snapshotEntities.Add(new EntityId(currentEntityId++), EntityTemplateFactory.CreateCubeTemplate());
 
-			SaveSnapshot(snapshotEntities);
+            float startX = -105, startZ = -105;
+            for (int i = 0; i < 20; ++i)
+            {
+                for (int j = 0; j < 20; ++j)
+                {
+                    snapshotEntities.Add(new EntityId(currentEntityId++), EntityTemplateFactory.CreateTileTemplate(new Vector3(startX + i*10f, 0, startZ + j*10f)));
+                }
+            }
+
+		    for (int i = 0; i < 10; ++i)
+		    {
+		        snapshotEntities.Add(new EntityId(currentEntityId++), EntityTemplateFactory.CreateMoverTemplate(new Vector3(Random.Range(-60f, -2f), 0, Random.Range(-60f, -2f))));
+		        snapshotEntities.Add(new EntityId(currentEntityId++), EntityTemplateFactory.CreateMoverTemplate(new Vector3(Random.Range(-60f, -2f), 0, Random.Range(2f, 60f))));
+		        snapshotEntities.Add(new EntityId(currentEntityId++), EntityTemplateFactory.CreateMoverTemplate(new Vector3(Random.Range(2f, 60f), 0, Random.Range(-60f, -2f))));
+		        snapshotEntities.Add(new EntityId(currentEntityId++), EntityTemplateFactory.CreateMoverTemplate(new Vector3(Random.Range(2f, 60f), 0, Random.Range(2f, 60f))));
+
+            }
+
+
+            SaveSnapshot(snapshotEntities);
 		}
 
 		private static void SaveSnapshot(IDictionary<EntityId, Entity> snapshotEntities)
