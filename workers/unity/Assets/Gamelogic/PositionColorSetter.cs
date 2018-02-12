@@ -6,20 +6,20 @@ using Improbable.Unity;
 using Improbable.Unity.Visualizer;
 
 [WorkerType(WorkerPlatform.UnityWorker)]
-public class ColorSetter : MonoBehaviour
+public class PositionColorSetter : MonoBehaviour
 {
 	[Require]
-	private Improbable.Demo.Color.Writer ColorWriter;
+	private Improbable.Demo.PositionColor.Writer PositionColorWriter;
 
     [Require]
     private Improbable.Position.Writer PositionWriter;
 
     private void OnEnable()
 	{
-        var update = new Improbable.Demo.Color.Update();
+        var update = new Improbable.Demo.PositionColor.Update();
 
         update.SetColorId(WorkerColor.Instace.ThisWorkerColorId);
 
-        ColorWriter.Send(update);
+	    PositionColorWriter.Send(update);
 	}
 }

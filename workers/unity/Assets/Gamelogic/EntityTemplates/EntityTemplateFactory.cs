@@ -8,6 +8,7 @@ using Quaternion = UnityEngine.Quaternion;
 using UnityEngine;
 using Improbable.Unity.Entity;
 using Improbable.Collections;
+using Improbable.Demo;
 
 namespace Assets.Gamelogic.EntityTemplates
 {
@@ -63,7 +64,8 @@ namespace Assets.Gamelogic.EntityTemplates
                 .AddMetadataComponent(entityType: SimulationSettings.TilePrefabName)
                 .SetPersistence(true)
                 .SetReadAcl(CommonRequirementSets.PhysicsOrVisual)
-                .AddComponent(new Improbable.Demo.Color.Data(0), CommonRequirementSets.PhysicsOnly)
+                .AddComponent(new Improbable.Demo.PositionColor.Data(0), CommonRequirementSets.PhysicsOnly)
+                .AddComponent(new Improbable.Demo.CheckOutColor.Data(new List<uint>()), CommonRequirementSets.PhysicsOnly)
                 .Build();
 
             return tileTemplate;
@@ -76,7 +78,8 @@ namespace Assets.Gamelogic.EntityTemplates
                 .AddMetadataComponent(entityType: SimulationSettings.MoverPrefabName)
                 .SetPersistence(true)
                 .SetReadAcl(CommonRequirementSets.PhysicsOrVisual)
-                .AddComponent(new Improbable.Demo.Color.Data(0), CommonRequirementSets.PhysicsOnly)
+                .AddComponent(new Improbable.Demo.PositionColor.Data(0), CommonRequirementSets.PhysicsOnly)
+                .AddComponent(new Improbable.Demo.CheckOutColor.Data(new List<uint>()), CommonRequirementSets.PhysicsOnly)
                 .Build();
 
             return moverTemplate;

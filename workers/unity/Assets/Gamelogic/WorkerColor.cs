@@ -10,7 +10,9 @@ public class WorkerColor : MonoBehaviour
 
 	public uint ThisWorkerColorId;
 
-	private void Awake()
+    private static Color[] colors = {new Color(1, 97/255f, 135/255f), new Color(89/255f, 124/255f, 244/255f), new Color(59/255f, 226/255f, 160/255f), new Color(1, 204/255f, 0) };
+    
+    private void Awake()
 	{
 		Instace = this;
 	}
@@ -31,11 +33,11 @@ public class WorkerColor : MonoBehaviour
 
 		switch (id)
 		{
-			case 1: return Color.red;
-			case 2: return Color.blue;
-			case 3: return Color.green;
-			case 4: return Color.yellow;
-			default: return Color.gray;
+			case 1: return colors[0];
+            case 2: return colors[1];
+            case 3: return colors[2];
+            case 4: return colors[3];
+            default: return Color.gray;
 
 		}
 

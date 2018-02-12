@@ -1,6 +1,6 @@
 package improbable.demo;
 
-component Color {
+component PositionColor {
   id = 2001;
   uint32 color_id = 1;
 }
