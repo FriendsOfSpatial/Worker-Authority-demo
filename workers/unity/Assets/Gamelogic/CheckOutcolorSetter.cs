@@ -11,6 +11,13 @@ using System.Linq;
 [WorkerType(WorkerPlatform.UnityWorker)]
 public class CheckOutcolorSetter : MonoBehaviour
 {
+    // This is needed to ensure that all 3 components are authoritative under the same worker, 
+    //so when we delay the authority handover of the other 2, we will need to get this one and handover this one at the same time
+    public Improbable.Demo.CheckOutColor.Writer GetCheckoutWriter()
+    {
+        return CheckOutColorWriter;
+    }
+
     [Require]
     private Improbable.Demo.CheckOutColor.Writer CheckOutColorWriter;
 
@@ -52,13 +59,13 @@ public class CheckOutcolorSetter : MonoBehaviour
         }
     }
 
-    private Nothing RespondToSendColorId(ColorId idReceived, ICommandCallerInfo callerInfo)
+    private SendColorIdReturn RespondToSendColorId(ColorId idReceived, ICommandCallerInfo callerInfo)
     {
         respondingColors.Add(idReceived.colorId);
         respondingColors = respondingColors.Distinct().ToList();
         respondingColors.Sort();
 
-        return Nothing.Create();
+        return SendColorIdReturn.Create();
     }
 
     private void DoPing()
@@ -68,7 +75,7 @@ public class CheckOutcolorSetter : MonoBehaviour
         respondingColors.Clear();
 
         var update = new Improbable.Demo.CheckOutColor.Update();
-        update.AddPing(Nothing.Create());
+        update.AddPing(PingInfo.Create());
         CheckOutColorWriter.Send(update);
     }
 }

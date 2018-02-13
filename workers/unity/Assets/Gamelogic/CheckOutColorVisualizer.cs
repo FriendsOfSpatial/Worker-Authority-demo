@@ -44,14 +44,14 @@ public class CheckOutColorVisualizer : MonoBehaviour
         CheckOutColorReader.ColorsIdsUpdated.Remove(OnColorsIdsUpdated);
     }
 
-    private void OnPing(Nothing nothing)
+    private void OnPing(PingInfo info)
     {
         if (WorkerColor.Instace != null)
         {
             SpatialOS.WorkerCommands.SendCommand(CheckOutColor.Commands.SendColorId.Descriptor,
                 new ColorId(WorkerColor.Instace.ThisWorkerColorId), gameObject.EntityId());
-            //.OnSuccess(response => OnCreatePlayerCommandSuccess(response, playerCreatorEntityId))
-            //.OnFailure(response => OnCreatePlayerCommandFailure(response, playerCreatorEntityId));
+            //.OnSuccess(response => )
+            //.OnFailure(response => );
         }
     }
 

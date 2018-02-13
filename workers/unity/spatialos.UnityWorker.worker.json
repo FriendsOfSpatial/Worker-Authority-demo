@@ -18,7 +18,23 @@
     "component_delivery": {
       "default": "RELIABLE_ORDERED",
       "checkout_all_initially": true
-    }
+    },
+	"componentSettings": {
+		"perComponentSettings": {
+			"improbable.demo.PositionColor": {
+				"authorityHandoverTimeoutMs": 1000
+			},
+			"improbable.demo.CheckOutColor": {
+				"authorityHandoverTimeoutMs": 1000
+			},
+			"improbable.Position": {
+				"authorityHandoverTimeoutMs": 1000
+			}
+		},
+		"default": {
+			"authorityHandoverTimeoutMs": 0
+		}
+	}
   },
   "managed": {
     "linux": {

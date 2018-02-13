@@ -1,6 +1,9 @@
 package improbable.demo;
 
-type Nothing {
+type PingInfo {
+}
+
+type SendColorIdReturn {
 }
 
 type ColorId {
@@ -10,6 +13,6 @@ type ColorId {
 component CheckOutColor {
   id = 2002;
   list<uint32> colors_ids = 1;
-  event Nothing ping;
-  command Nothing send_color_id(ColorId);
+  event PingInfo ping;
+  command SendColorIdReturn send_color_id(ColorId);
 }
