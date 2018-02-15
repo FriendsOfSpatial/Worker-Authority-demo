@@ -24,7 +24,7 @@ public class CheckOutcolorSetter : MonoBehaviour
     [Require]
     private Improbable.Position.Writer PositionWriter;
 
-    private static int PING_TIMEOUT_FRAMES = 5;
+    private static int PING_TIMEOUT_FRAMES = 10;
 
     private int counter = PING_TIMEOUT_FRAMES;
     private List<uint> respondingColors = new Improbable.Collections.List<uint>();

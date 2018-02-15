@@ -54,5 +54,4 @@ public class PositionColorVisualizer : MonoBehaviour
             particles.Play();
         }
     }
-
 }

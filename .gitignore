@@ -1,5 +1,25 @@
+# Logs
 spatial.log
-spatialos_worker_packages.json
-build/
 logs/
+
+# Schema generated code
+generated_code
+
+# Worker SDK and other dependencies
+dependencies/
+
+spatialos_worker_packages.json
+
+# SpatialOS project build directory
+build/
+
+# Cache and other project metadata
+.spatialos/
+
 workers/unity/external-default-unityclient.log
+
+# Visual Studio output directories and temporary files
+bin
+obj
+.vs
+*.user

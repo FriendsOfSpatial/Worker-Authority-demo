@@ -19,20 +19,20 @@ public class CheckOutColorVisualizer : MonoBehaviour
     private GameObject poleParent;
 
     [SerializeField]
-    private List<GameObject> poles;
+    private List<GameObject> positionPoles;
 
     [SerializeField]
-    private List<MeshRenderer> flagsRendereres;
+    private List<MeshRenderer> positionFlagsRendereres;
+
+    [SerializeField]
+    private List<GameObject> headPoles;
+
+    [SerializeField]
+    private List<MeshRenderer> headFlagsRendereres;
 
     private void OnEnable()
     {
-
-        for (int i=0; i<CheckOutColorReader.Data.colorsIds.Count; ++i)
-        {
-            flagsRendereres[i].material.color = WorkerColor.GetcolorFromId(CheckOutColorReader.Data.colorsIds[i]);
-            poles[i].SetActive(true);
-        }
-
+        UpdateFlags(CheckOutColorReader.Data.colorsIds);
 
         CheckOutColorReader.PingTriggered.Add(OnPing);
         CheckOutColorReader.ColorsIdsUpdated.Add(OnColorsIdsUpdated);
@@ -65,28 +65,63 @@ public class CheckOutColorVisualizer : MonoBehaviour
         // Set bottom flag always the color of position
         colorIDs.Remove(PositionColorReader.Data.colorId);
 
-        flagsRendereres[0].material.color = WorkerColor.GetcolorFromId(PositionColorReader.Data.colorId);
-        flagsRendereres[0].gameObject.SetActive(true);
-        poles[0].SetActive(true);
+        positionFlagsRendereres[0].material.color = WorkerColor.GetcolorFromId(PositionColorReader.Data.colorId);
+        positionFlagsRendereres[0].gameObject.SetActive(true);
+        positionPoles[0].SetActive(true);
 
+        // Split list in colors from position workers and head workers
+        List<uint> positionColors = new List<uint>();
+        List<uint> headColors = new List<uint>();
 
-        // Color rest of flags
-        for (int i = 0; i < colorIDs.Count; ++i)
+        foreach (uint colorId in colorIDs)
         {
-            flagsRendereres[i + 1].material.color = WorkerColor.GetcolorFromId(colorIDs[i]);
-            flagsRendereres[i + 1].gameObject.SetActive(true);
-            poles[i + 1].SetActive(true);
-        }
-
-        if (colorIDs.Count < flagsRendereres.Count)
-        {
-            for (int i = colorIDs.Count + 1; i < flagsRendereres.Count; ++i)
+            if (colorId <= 4)
             {
-                flagsRendereres[i].material.color = Color.gray;
-                flagsRendereres[i].gameObject.SetActive(false);
-                poles[i].SetActive(false);
+                positionColors.Add(colorId);
+            }
+            else
+            {
+                headColors.Add(colorId);
             }
         }
+
+
+        // Color rest of position flags
+        for (int i = 0; i < positionColors.Count; ++i)
+        {
+            positionFlagsRendereres[i + 1].material.color = WorkerColor.GetcolorFromId(positionColors[i]);
+            positionFlagsRendereres[i + 1].gameObject.SetActive(true);
+            positionPoles[i + 1].SetActive(true);
+        }
+
+        if (positionColors.Count < positionFlagsRendereres.Count)
+        {
+            for (int i = positionColors.Count + 1; i < positionFlagsRendereres.Count; ++i)
+            {
+                positionFlagsRendereres[i].material.color = Color.gray;
+                positionFlagsRendereres[i].gameObject.SetActive(false);
+                positionPoles[i].SetActive(false);
+            }
+        }
+
+        // Color head flags
+        for (int i = 0; i < headColors.Count; ++i)
+        {
+            headFlagsRendereres[i].material.color = WorkerColor.GetcolorFromId(headColors[i]);
+            headFlagsRendereres[i].gameObject.SetActive(true);
+            headPoles[i].SetActive(true);
+        }
+
+        if (headColors.Count < headFlagsRendereres.Count)
+        {
+            for (int i = headColors.Count; i < headFlagsRendereres.Count; ++i)
+            {
+                headFlagsRendereres[i].material.color = Color.gray;
+                headFlagsRendereres[i].gameObject.SetActive(false);
+                headPoles[i].SetActive(false);
+            }
+        }
+
 
         // Turn off flagpole if no other workers have the entity checked out
         if (colorIDs.Count < 1)

@@ -10,9 +10,9 @@ namespace Assets.Gamelogic.Core
         public static readonly string TilePrefabName = "Tile";
         public static readonly string MoverPrefabName = "Mover";
 
-        public static readonly float HeartbeatCheckIntervalSecs = 3;
-        public static readonly uint TotalHeartbeatsBeforeTimeout = 3;
-        public static readonly float HeartbeatSendingIntervalSecs = 3;
+        public static readonly float HeartbeatCheckIntervalSecs = 5;
+        public static readonly uint TotalHeartbeatsBeforeTimeout = 5;
+        public static readonly float HeartbeatSendingIntervalSecs = 5;
 
         public static readonly int TargetClientFramerate = 60;
         public static readonly int TargetServerFramerate = 60;

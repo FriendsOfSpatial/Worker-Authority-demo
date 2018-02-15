@@ -32,7 +32,7 @@ namespace Assets.Gamelogic.EntityTemplates
         public static Entity CreatePlayerTemplate(string clientId, EntityId playerCreatorId)
         {
             var playerTemplate = EntityBuilder.Begin()
-                .AddPositionComponent(Improbable.Coordinates.ZERO.ToUnityVector(), CommonRequirementSets.PhysicsOnly)
+                .AddPositionComponent(Improbable.Coordinates.ZERO.ToUnityVector(), CommonRequirementSets.SpecificClientOnly(clientId))
                 .AddMetadataComponent(entityType: SimulationSettings.PlayerPrefabName)
                 .SetPersistence(false)
                 .SetReadAcl(CommonRequirementSets.PhysicsOrVisual)
@@ -63,7 +63,7 @@ namespace Assets.Gamelogic.EntityTemplates
                 .AddPositionComponent(position, CommonRequirementSets.PhysicsOnly)
                 .AddMetadataComponent(entityType: SimulationSettings.TilePrefabName)
                 .SetPersistence(true)
-                .SetReadAcl(CommonRequirementSets.PhysicsOrVisual)
+                .SetReadAcl(Acl.MakeRequirementSet(CommonAttributeSets.Physics, CommonAttributeSets.Visual, Acl.MakeAttributeSet("head_color_attribute")))
                 .AddComponent(new Improbable.Demo.PositionColor.Data(0), CommonRequirementSets.PhysicsOnly)
                 .AddComponent(new Improbable.Demo.CheckOutColor.Data(new List<uint>()), CommonRequirementSets.PhysicsOnly)
                 .Build();
@@ -77,9 +77,10 @@ namespace Assets.Gamelogic.EntityTemplates
                 .AddPositionComponent(position, CommonRequirementSets.PhysicsOnly)
                 .AddMetadataComponent(entityType: SimulationSettings.MoverPrefabName)
                 .SetPersistence(true)
-                .SetReadAcl(CommonRequirementSets.PhysicsOrVisual)
+                .SetReadAcl(Acl.MakeRequirementSet(CommonAttributeSets.Physics, CommonAttributeSets.Visual, Acl.MakeAttributeSet("head_color_attribute")))
                 .AddComponent(new Improbable.Demo.PositionColor.Data(0), CommonRequirementSets.PhysicsOnly)
                 .AddComponent(new Improbable.Demo.CheckOutColor.Data(new List<uint>()), CommonRequirementSets.PhysicsOnly)
+                .AddComponent(new Improbable.Demo.HeadColor.Data(0), Acl.MakeRequirementSet(Acl.MakeAttributeSet("head_color_attribute")))
                 .Build();
 
             return moverTemplate;
