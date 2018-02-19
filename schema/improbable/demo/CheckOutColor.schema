@@ -6,6 +6,9 @@ type PingInfo {
 type SendColorIdReturn {
 }
 
+type SendAndUpdateColorIdReturn {
+}
+
 type ColorId {
 	uint32 color_id = 1;
 }
@@ -15,4 +18,5 @@ component CheckOutColor {
   list<uint32> colors_ids = 1;
   event PingInfo ping;
   command SendColorIdReturn send_color_id(ColorId);
+  command SendAndUpdateColorIdReturn send_and_update_color_id(ColorId);
 }

@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using Improbable.Core;
 using Improbable.Demo;
+using Improbable.Unity;
 using Improbable.Unity.Core;
 using Improbable.Unity.Export;
 using Improbable.Unity.Visualizer;
 using UnityEngine;
 
+[WorkerType(WorkerPlatform.UnityClient)]
 public class CheckOutColorVisualizer : MonoBehaviour
 {
     [Require]
@@ -16,62 +18,42 @@ public class CheckOutColorVisualizer : MonoBehaviour
     private Improbable.Demo.PositionColor.Reader PositionColorReader;
 
     [SerializeField]
-    private GameObject poleParent;
+    private List<MeshRenderer> positionRenderers;
 
     [SerializeField]
-    private List<GameObject> positionPoles;
+    private List<MeshRenderer> turretRenderers;
 
     [SerializeField]
-    private List<MeshRenderer> positionFlagsRendereres;
-
-    [SerializeField]
-    private List<GameObject> headPoles;
-
-    [SerializeField]
-    private List<MeshRenderer> headFlagsRendereres;
+    bool isTank;
 
     private void OnEnable()
     {
-        UpdateFlags(CheckOutColorReader.Data.colorsIds);
+        UpdateColors(CheckOutColorReader.Data.colorsIds);
 
-        CheckOutColorReader.PingTriggered.Add(OnPing);
         CheckOutColorReader.ColorsIdsUpdated.Add(OnColorsIdsUpdated);
     }
 
     private void OnDisable()
     {
-        CheckOutColorReader.PingTriggered.Remove(OnPing);
         CheckOutColorReader.ColorsIdsUpdated.Remove(OnColorsIdsUpdated);
     }
 
-    private void OnPing(PingInfo info)
+    protected virtual void OnColorsIdsUpdated(List<uint> newColorsIds)
     {
-        if (WorkerColor.Instace != null)
+        UpdateColors(newColorsIds);
+    }
+
+    protected void UpdateColors(List<uint> colorIDs)
+    {
+        // Remove authoritative color only in tiles, for aesthetics reasons
+        if (!isTank)
         {
-            SpatialOS.WorkerCommands.SendCommand(CheckOutColor.Commands.SendColorId.Descriptor,
-                new ColorId(WorkerColor.Instace.ThisWorkerColorId), gameObject.EntityId());
-            //.OnSuccess(response => )
-            //.OnFailure(response => );
+            colorIDs.Remove(PositionColorReader.Data.colorId);
         }
-    }
 
-    private void OnColorsIdsUpdated(List<uint> newColorsIds)
-    {
-        UpdateFlags(newColorsIds);
-    }
-
-    private void UpdateFlags(List<uint> colorIDs)
-    {
-        // Set bottom flag always the color of position
-        colorIDs.Remove(PositionColorReader.Data.colorId);
-
-        positionFlagsRendereres[0].material.color = WorkerColor.GetcolorFromId(PositionColorReader.Data.colorId);
-        positionFlagsRendereres[0].gameObject.SetActive(true);
-        positionPoles[0].SetActive(true);
-
-        // Split list in colors from position workers and head workers
+        // Split list in colors from position workers and turret workers
         List<uint> positionColors = new List<uint>();
-        List<uint> headColors = new List<uint>();
+        List<uint> turretColors = new List<uint>();
 
         foreach (uint colorId in colorIDs)
         {
@@ -81,56 +63,58 @@ public class CheckOutColorVisualizer : MonoBehaviour
             }
             else
             {
-                headColors.Add(colorId);
+                turretColors.Add(colorId);
             }
         }
 
 
-        // Color rest of position flags
-        for (int i = 0; i < positionColors.Count; ++i)
+        // Set position workers colors depending on amount of different color
+        if (positionColors.Count != 0)
         {
-            positionFlagsRendereres[i + 1].material.color = WorkerColor.GetcolorFromId(positionColors[i]);
-            positionFlagsRendereres[i + 1].gameObject.SetActive(true);
-            positionPoles[i + 1].SetActive(true);
-        }
-
-        if (positionColors.Count < positionFlagsRendereres.Count)
-        {
-            for (int i = positionColors.Count + 1; i < positionFlagsRendereres.Count; ++i)
+            int renderersPerColor = positionRenderers.Count / positionColors.Count;
+            for (int i = 0; i < positionColors.Count; ++i)
             {
-                positionFlagsRendereres[i].material.color = Color.gray;
-                positionFlagsRendereres[i].gameObject.SetActive(false);
-                positionPoles[i].SetActive(false);
+                for (int j = 0; j < renderersPerColor; ++j)
+                {
+                    positionRenderers[i * renderersPerColor + j].material.color =
+                        WorkerColor.GetcolorFromId(positionColors[i]);
+                }
             }
         }
-
-        // Color head flags
-        for (int i = 0; i < headColors.Count; ++i)
-        {
-            headFlagsRendereres[i].material.color = WorkerColor.GetcolorFromId(headColors[i]);
-            headFlagsRendereres[i].gameObject.SetActive(true);
-            headPoles[i].SetActive(true);
-        }
-
-        if (headColors.Count < headFlagsRendereres.Count)
-        {
-            for (int i = headColors.Count; i < headFlagsRendereres.Count; ++i)
-            {
-                headFlagsRendereres[i].material.color = Color.gray;
-                headFlagsRendereres[i].gameObject.SetActive(false);
-                headPoles[i].SetActive(false);
-            }
-        }
-
-
-        // Turn off flagpole if no other workers have the entity checked out
-        if (colorIDs.Count < 1)
-        {
-            poleParent.SetActive(false);
-        }
+        // If there are no other checking out, fill with base color
         else
         {
-            poleParent.SetActive(true);
+            for (int i = 0; i < positionRenderers.Count; ++i)
+            {
+                positionRenderers[i].material.color = WorkerColor.GetcolorFromId(PositionColorReader.Data.colorId);
+            }
+        }
+
+        // Set turret workers colors
+        if (turretColors.Count != 0)
+        {
+            int renderersPerColor = turretRenderers.Count / turretColors.Count;
+            for (int i = 0; i < turretColors.Count; ++i)
+            {
+                for (int j = 0; j < renderersPerColor; ++j)
+                {
+                    turretRenderers[i * renderersPerColor + j].material.color =
+                        WorkerColor.GetcolorFromId(turretColors[i]);
+                }
+            }
+        }
+        // If there are no other checking out, fill with base color
+        else
+        {
+            for (int i = turretColors.Count; i < turretRenderers.Count; ++i)
+            {
+                turretRenderers[i].material.color = Color.white;
+            }
+
+            if (isTank)
+            {
+                Debug.LogWarning(string.Format("Tank Entity {0} is not checked out by any turret workers", gameObject.EntityId()));
+            }
         }
     }
 }

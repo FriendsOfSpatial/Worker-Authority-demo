@@ -41,7 +41,7 @@ public class WorkerColor : MonoBehaviour
             case 4: return colors[3];
 		    case 5: return colors[4];
 		    case 6: return colors[5];
-            default: return Color.gray;
+            default: return Color.white;
 
 		}
 

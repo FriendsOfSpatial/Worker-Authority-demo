@@ -1,7 +1,7 @@
 {
-  "template": "small",
+  "template": "medium",
   "world": {
-    "chunkEdgeLengthMeters": 10,
+    "chunkEdgeLengthMeters": 15,
     "snapshots": {
       "snapshotWritePeriodSeconds": 0
     },
@@ -58,11 +58,11 @@
 			"points": [
 				{
 					"x": -1,
-					"z": 0
+					"z": -1
 				},
 				{
 					"x": 1,
-					"z": 0
+					"z": 1
 				}]
 			}
 		},

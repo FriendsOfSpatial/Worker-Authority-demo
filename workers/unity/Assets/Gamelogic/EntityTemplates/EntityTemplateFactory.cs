@@ -63,7 +63,7 @@ namespace Assets.Gamelogic.EntityTemplates
                 .AddPositionComponent(position, CommonRequirementSets.PhysicsOnly)
                 .AddMetadataComponent(entityType: SimulationSettings.TilePrefabName)
                 .SetPersistence(true)
-                .SetReadAcl(Acl.MakeRequirementSet(CommonAttributeSets.Physics, CommonAttributeSets.Visual, Acl.MakeAttributeSet("head_color_attribute")))
+                .SetReadAcl(Acl.MakeRequirementSet(CommonAttributeSets.Physics, CommonAttributeSets.Visual, Acl.MakeAttributeSet("turret_rotation")))
                 .AddComponent(new Improbable.Demo.PositionColor.Data(0), CommonRequirementSets.PhysicsOnly)
                 .AddComponent(new Improbable.Demo.CheckOutColor.Data(new List<uint>()), CommonRequirementSets.PhysicsOnly)
                 .Build();
@@ -71,16 +71,16 @@ namespace Assets.Gamelogic.EntityTemplates
             return tileTemplate;
         }
 
-        public static Entity CreateMoverTemplate(Vector3 position)
+        public static Entity CreateTankTemplate(Vector3 position)
         {
             var moverTemplate = EntityBuilder.Begin()
                 .AddPositionComponent(position, CommonRequirementSets.PhysicsOnly)
-                .AddMetadataComponent(entityType: SimulationSettings.MoverPrefabName)
+                .AddMetadataComponent(entityType: SimulationSettings.TankPrefabName)
                 .SetPersistence(true)
-                .SetReadAcl(Acl.MakeRequirementSet(CommonAttributeSets.Physics, CommonAttributeSets.Visual, Acl.MakeAttributeSet("head_color_attribute")))
+                .SetReadAcl(Acl.MakeRequirementSet(CommonAttributeSets.Physics, CommonAttributeSets.Visual, Acl.MakeAttributeSet("turret_rotation")))
                 .AddComponent(new Improbable.Demo.PositionColor.Data(0), CommonRequirementSets.PhysicsOnly)
                 .AddComponent(new Improbable.Demo.CheckOutColor.Data(new List<uint>()), CommonRequirementSets.PhysicsOnly)
-                .AddComponent(new Improbable.Demo.HeadColor.Data(0), Acl.MakeRequirementSet(Acl.MakeAttributeSet("head_color_attribute")))
+                .AddComponent(new Improbable.Demo.TurretInfo.Data(Random.Range(0,360),0), Acl.MakeRequirementSet(Acl.MakeAttributeSet("turret_rotation")))
                 .Build();
 
             return moverTemplate;

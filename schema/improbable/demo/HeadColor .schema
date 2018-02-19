@@ -1,6 +1,0 @@
-package improbable.demo;
-
-component HeadColor {
-  id = 2003;
-  uint32 color_id = 1;
-}

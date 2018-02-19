@@ -7,21 +7,25 @@ using Improbable.Unity.Visualizer;
 using System;
 using Improbable.Demo;
 
+[WorkerType(WorkerPlatform.UnityClient)]
 public class PositionColorVisualizer : MonoBehaviour
 {
     [Require]
     private Improbable.Demo.PositionColor.Reader PositionColorReader;
 
     [SerializeField]
-    private MeshRenderer posRenderer;
+    private List<MeshRenderer> posRenderers;
 
     [SerializeField]
     private ParticleSystem particles;
 
     private void OnEnable()
     {
-        posRenderer.material.color = WorkerColor.GetcolorFromId(PositionColorReader.Data.colorId);
-
+        foreach (MeshRenderer renderer in posRenderers)
+        {
+            renderer.material.color = WorkerColor.GetcolorFromId(PositionColorReader.Data.colorId);
+        }
+        
         if (particles != null)
         {
             particles.startColor = WorkerColor.GetcolorFromId(PositionColorReader.Data.colorId);
@@ -39,7 +43,10 @@ public class PositionColorVisualizer : MonoBehaviour
 
     private void OnColorIdUpdated(uint newColorId)
     {
-        posRenderer.material.color = WorkerColor.GetcolorFromId(newColorId);
+        foreach (Renderer renderer in posRenderers)
+        {
+            renderer.material.color = WorkerColor.GetcolorFromId(PositionColorReader.Data.colorId);
+        }
 
         if (particles != null)
         {

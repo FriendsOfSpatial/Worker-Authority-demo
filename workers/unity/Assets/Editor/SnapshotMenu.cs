@@ -19,24 +19,27 @@ namespace Assets.Editor
 
 			snapshotEntities.Add(new EntityId(currentEntityId++), EntityTemplateFactory.CreatePlayerCreatorTemplate());
 
-            float startX = -105, startZ = -105;
+            float startX = -142.5f, startZ = -142.5f;
             for (int i = 0; i < 20; ++i)
             {
                 for (int j = 0; j < 20; ++j)
                 {
-                    snapshotEntities.Add(new EntityId(currentEntityId++), EntityTemplateFactory.CreateTileTemplate(new Vector3(startX + i*10f, 0, startZ + j*10f)));
+                    snapshotEntities.Add(new EntityId(currentEntityId++), EntityTemplateFactory.CreateTileTemplate(new Vector3(startX + i*15f, 0, startZ + j*15f)));
                 }
             }
 
-		    for (int i = 0; i < 10; ++i)
+            // Inner circle
+            snapshotEntities.Add(new EntityId(currentEntityId++), EntityTemplateFactory.CreateTankTemplate(new Vector3(-5, 0, -5)));
+
+
+		    for (int i = 1; i < 10; ++i)
 		    {
-		        snapshotEntities.Add(new EntityId(currentEntityId++), EntityTemplateFactory.CreateMoverTemplate(new Vector3(Random.Range(-60f, -2f), 0, Random.Range(-60f, -2f))));
-		        snapshotEntities.Add(new EntityId(currentEntityId++), EntityTemplateFactory.CreateMoverTemplate(new Vector3(Random.Range(-60f, -2f), 0, Random.Range(2f, 60f))));
-		        snapshotEntities.Add(new EntityId(currentEntityId++), EntityTemplateFactory.CreateMoverTemplate(new Vector3(Random.Range(2f, 60f), 0, Random.Range(-60f, -2f))));
-		        snapshotEntities.Add(new EntityId(currentEntityId++), EntityTemplateFactory.CreateMoverTemplate(new Vector3(Random.Range(2f, 60f), 0, Random.Range(2f, 60f))));
-
+		        Vector3 posVector = Vector3.forward * 15 * i;
+                snapshotEntities.Add(new EntityId(currentEntityId++),EntityTemplateFactory.CreateTankTemplate(Quaternion.Euler(0, Random.Range(1, 90), 0) * posVector));
+		        snapshotEntities.Add(new EntityId(currentEntityId++), EntityTemplateFactory.CreateTankTemplate(Quaternion.Euler(0, Random.Range(91, 180), 0) * posVector));
+		        snapshotEntities.Add(new EntityId(currentEntityId++), EntityTemplateFactory.CreateTankTemplate(Quaternion.Euler(0, Random.Range(181, 270), 0) * posVector));
+		        snapshotEntities.Add(new EntityId(currentEntityId++), EntityTemplateFactory.CreateTankTemplate(Quaternion.Euler(0, Random.Range(271, 360), 0) * posVector));
             }
-
 
             SaveSnapshot(snapshotEntities);
 		}

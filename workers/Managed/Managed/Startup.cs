@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using System.Xml.Serialization;
 using Improbable.Worker;
 
 namespace Managed
@@ -12,7 +13,7 @@ namespace Managed
 
         private const int ErrorExitStatus = 1;
 
-        private const uint GetOpListTimeoutInMilliseconds = 50;
+        private const uint MaxFrameMiliseconds = 50;
 
         private static int Main(string[] args)
         {
@@ -57,20 +58,33 @@ namespace Managed
 
                 uint colorInt = uint.Parse(connection.GetWorkerId().Substring(connection.GetWorkerId().Length - 1));
                 colorInt = (colorInt % 2) + 5;
-                HeadColorProcessor colorProcessor = new HeadColorProcessor(colorInt, connection);
+                TurretProcessor processor = new TurretProcessor(colorInt, connection);
 
-                dispatcher.OnAddComponent<Improbable.Demo.HeadColor>(colorProcessor.OnComponentAdded);
-                dispatcher.OnComponentUpdate<Improbable.Demo.HeadColor>(colorProcessor.OnComponentUpdate);
-                dispatcher.OnAuthorityChange<Improbable.Demo.HeadColor>(colorProcessor.OnAuthChangeOnComponentHeadColor);
-                dispatcher.OnComponentUpdate<Improbable.Demo.CheckOutColor>(colorProcessor.OnCheckOutUpdate);
+                dispatcher.OnAuthorityChange<Improbable.Demo.TurretInfo>(processor.OnTurretInfoComponentAuthorityChanged);
+                dispatcher.OnAddComponent<Improbable.Demo.TurretInfo>(processor.OnTurretInfoComponentAdded);
+                dispatcher.OnRemoveComponent<Improbable.Demo.TurretInfo>(processor.OnTurretInfoComponentRemoved);
+                dispatcher.OnComponentUpdate<Improbable.Demo.TurretInfo>(processor.OnTurretInfoComponentUpdated);
 
+                dispatcher.OnComponentUpdate<Improbable.Demo.CheckOutColor>(processor.OnCheckOutComponentUpdated);
+
+                dispatcher.OnCommandResponse<Improbable.Demo.CheckOutColor.Commands.SendColorId>(processor.OnCommandSendColorIdResponse);
+                dispatcher.OnCommandResponse<Improbable.Demo.CheckOutColor.Commands.SendAndUpdateColorId>(processor.OnCommandSendAndUpdateColorIdResponse);
+
+                var maxWait = System.TimeSpan.FromMilliseconds(MaxFrameMiliseconds);
+                var stopwatch = new System.Diagnostics.Stopwatch();
                 while (isConnected)
                 {
-                    using (var opList = connection.GetOpList(GetOpListTimeoutInMilliseconds))
-                    {
-                        dispatcher.Process(opList);
-                        colorProcessor.CheckCorrectValues();
-                    }
+                    stopwatch.Reset();
+                    stopwatch.Start();
+
+                    var opList = connection.GetOpList(0);
+                    dispatcher.Process(opList);
+
+                    processor.Tick(MaxFrameMiliseconds);
+
+                    stopwatch.Stop();
+                    var waitFor = maxWait.Subtract(stopwatch.Elapsed);
+                    System.Threading.Thread.Sleep(waitFor.Milliseconds > 0 ? waitFor : System.TimeSpan.Zero);
                 }
             }
 

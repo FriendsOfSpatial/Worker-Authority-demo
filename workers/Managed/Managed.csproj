@@ -23,7 +23,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Managed\HeadColorProcessor.cs" />
+    <Compile Include="Managed\TurretProcessor.cs" />
     <Compile Include="Managed\Startup.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

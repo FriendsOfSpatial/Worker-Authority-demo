@@ -5,12 +5,12 @@
   "bridge": {
     "worker_attribute_set": {
       "attributes": [
-        "head_color_attribute"
+        "turret_rotation"
       ]
     },
     "entity_interest": {
       "range_entity_interest": {
-        "radius": 2
+        "radius": 15
       }
     },
     "component_delivery": {
@@ -19,8 +19,8 @@
     },
 	"componentSettings": {
 		"perComponentSettings": {
-			"improbable.demo.HeadColor": {
-				"authorityHandoverTimeoutMs": 1000
+			"improbable.demo.TurretInfo": {
+				"authorityHandoverTimeoutMs": 100
 			}
 		},
 		"default": {
