@@ -752,6 +752,7 @@ MonoBehaviour:
   posRenderers:
   - {fileID: 23919614729649656}
   particles: {fileID: 0}
+  isTank: 0
 --- !u!114 &114955671515249008
 MonoBehaviour:
   m_ObjectHideFlags: 1

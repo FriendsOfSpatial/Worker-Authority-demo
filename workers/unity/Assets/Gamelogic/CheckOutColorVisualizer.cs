@@ -43,7 +43,7 @@ public class CheckOutColorVisualizer : MonoBehaviour
         UpdateColors(newColorsIds);
     }
 
-    protected void UpdateColors(List<uint> colorIDs)
+    public void UpdateColors(List<uint> colorIDs)
     {
         // Remove authoritative color only in tiles, for aesthetics reasons
         if (!isTank)
@@ -67,6 +67,32 @@ public class CheckOutColorVisualizer : MonoBehaviour
             }
         }
 
+        if (isTank)
+        {
+            if (!VisualizerSettings.Instance.UseTankPositionCheckOutColor)
+            {
+                positionColors.Clear();
+            }
+
+            if (!VisualizerSettings.Instance.UseTankTurretCheckOutColor)
+            {
+                turretColors.Clear();
+            }
+
+        }
+        else
+        {
+            if (!VisualizerSettings.Instance.UseTilePositionCheckOutColor)
+            {
+                positionColors.Clear();
+            }
+
+            if (!VisualizerSettings.Instance.UseTileTurretCheckOutColor)
+            {
+                turretColors.Clear();
+            }
+        }
+
 
         // Set position workers colors depending on amount of different color
         if (positionColors.Count != 0)
@@ -78,15 +104,28 @@ public class CheckOutColorVisualizer : MonoBehaviour
                 {
                     positionRenderers[i * renderersPerColor + j].material.color =
                         WorkerColor.GetcolorFromId(positionColors[i]);
+                    positionRenderers[i * renderersPerColor + j].enabled = true;
                 }
             }
         }
         // If there are no other checking out, fill with base color
         else
         {
+            Color colorToUse;
+            if (isTank)
+            {
+                colorToUse = WorkerColor.GetcolorFromId(VisualizerSettings.Instance.UseTankPositionCheckOutColor ? PositionColorReader.Data.colorId : 0);
+            }
+            else
+            {
+                colorToUse = WorkerColor.GetcolorFromId(VisualizerSettings.Instance.UseTilePositionCheckOutColor ? PositionColorReader.Data.colorId : 0);
+            }
+
             for (int i = 0; i < positionRenderers.Count; ++i)
             {
-                positionRenderers[i].material.color = WorkerColor.GetcolorFromId(PositionColorReader.Data.colorId);
+                positionRenderers[i].material.color = colorToUse;
+
+                positionRenderers[i].enabled = false;
             }
         }
 
@@ -100,6 +139,8 @@ public class CheckOutColorVisualizer : MonoBehaviour
                 {
                     turretRenderers[i * renderersPerColor + j].material.color =
                         WorkerColor.GetcolorFromId(turretColors[i]);
+
+                    turretRenderers[i * renderersPerColor + j].enabled = true;
                 }
             }
         }
@@ -108,12 +149,14 @@ public class CheckOutColorVisualizer : MonoBehaviour
         {
             for (int i = turretColors.Count; i < turretRenderers.Count; ++i)
             {
-                turretRenderers[i].material.color = Color.white;
+                turretRenderers[i].material.color = WorkerColor.GetcolorFromId(0);
+
+                turretRenderers[i].enabled = false;
             }
 
             if (isTank)
             {
-                Debug.LogWarning(string.Format("Tank Entity {0} is not checked out by any turret workers", gameObject.EntityId()));
+                //Debug.LogWarning(string.Format("Tank Entity {0} is not checked out by any turret workers", gameObject.EntityId()));
             }
         }
     }

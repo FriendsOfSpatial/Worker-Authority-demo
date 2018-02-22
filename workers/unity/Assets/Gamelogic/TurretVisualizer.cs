@@ -17,15 +17,15 @@ public class TurretVisualizer : MonoBehaviour {
     [SerializeField]
     private GameObject turretRoot;
 
+    [SerializeField]
+    private ParticleSystem particles;
+
     private float rotationAngle, lastRotationAngle;
     private int framesSameRotation;
 
     private void OnEnable()
     {
-        foreach (MeshRenderer renderer in turretRenderers)
-        {
-            renderer.material.color = WorkerColor.GetcolorFromId(TurretInfoReader.Data.colorId);
-        }
+        SetColor();
 
         rotationAngle = TurretInfoReader.Data.rotation;
         turretRoot.transform.localRotation = Quaternion.AngleAxis(TurretInfoReader.Data.rotation, Vector3.up);
@@ -33,12 +33,16 @@ public class TurretVisualizer : MonoBehaviour {
         TurretInfoReader.ColorIdUpdated.Add(OnColorIdUpdated);
         TurretInfoReader.RotationUpdated.Add(OnRotationUpdated);
 
+        VisualizerSettings.Instance.TankTurretColorVisualizers.Add(this);
+
     }
 
     private void OnDisable()
     {
         TurretInfoReader.ColorIdUpdated.Remove(OnColorIdUpdated);
         TurretInfoReader.RotationUpdated.Remove(OnRotationUpdated);
+
+        VisualizerSettings.Instance.TankTurretColorVisualizers.Remove(this);
     }
 
     private void FixedUpdate()
@@ -60,11 +64,29 @@ public class TurretVisualizer : MonoBehaviour {
         lastRotationAngle = rotationAngle;
     }
 
+    private void OnLosingAuth(LosingAuthInfo info)
+    {
+        if (particles != null && VisualizerSettings.Instance.UseTankTurretTransitionParticles)
+        {
+            particles.Play();
+        }
+    }
+
     private void OnColorIdUpdated(uint newColorId)
+    {
+        SetColor();
+    }
+
+    public void SetColor()
     {
         foreach (MeshRenderer renderer in turretRenderers)
         {
-            renderer.material.color = WorkerColor.GetcolorFromId(newColorId);
+            renderer.material.color = WorkerColor.GetcolorFromId(VisualizerSettings.Instance.UseTankTurretAuthorityColor ? TurretInfoReader.Data.colorId : 0);
+        }
+
+        if (particles != null)
+        {
+            particles.startColor = WorkerColor.GetcolorFromId(TurretInfoReader.Data.colorId);
         }
     }
 

@@ -1,5 +1,5 @@
 {
-  "template": "medium",
+  "template": "small",
   "world": {
     "chunkEdgeLengthMeters": 15,
     "snapshots": {
