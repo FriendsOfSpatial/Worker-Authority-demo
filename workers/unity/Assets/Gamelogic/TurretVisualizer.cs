@@ -33,6 +33,8 @@ public class TurretVisualizer : MonoBehaviour {
         TurretInfoReader.ColorIdUpdated.Add(OnColorIdUpdated);
         TurretInfoReader.RotationUpdated.Add(OnRotationUpdated);
 
+        TurretInfoReader.LosingAuthTriggered.Add(OnLosingAuth);
+
         VisualizerSettings.Instance.TankTurretColorVisualizers.Add(this);
 
     }
@@ -41,6 +43,8 @@ public class TurretVisualizer : MonoBehaviour {
     {
         TurretInfoReader.ColorIdUpdated.Remove(OnColorIdUpdated);
         TurretInfoReader.RotationUpdated.Remove(OnRotationUpdated);
+
+        TurretInfoReader.LosingAuthTriggered.Remove(OnLosingAuth);
 
         VisualizerSettings.Instance.TankTurretColorVisualizers.Remove(this);
     }
@@ -55,7 +59,7 @@ public class TurretVisualizer : MonoBehaviour {
         {
             if (framesSameRotation > 10)
             {
-                Debug.LogWarning(string.Format("Entity {0} had same rotation for {1} frames!", gameObject.EntityId(), framesSameRotation));
+                //Debug.LogWarning(string.Format("Entity {0} had same rotation for {1} frames!", gameObject.EntityId(), framesSameRotation));
             }
 
             framesSameRotation = 0;
@@ -64,7 +68,7 @@ public class TurretVisualizer : MonoBehaviour {
         lastRotationAngle = rotationAngle;
     }
 
-    private void OnLosingAuth(LosingAuthInfo info)
+    private void OnLosingAuth(LosingTurretAuthInfo info)
     {
         if (particles != null && VisualizerSettings.Instance.UseTankTurretTransitionParticles)
         {

@@ -20,7 +20,7 @@
 	"componentSettings": {
 		"perComponentSettings": {
 			"improbable.demo.TurretInfo": {
-				"authorityHandoverTimeoutMs": 100
+				"authorityHandoverTimeoutMs": 500
 			}
 		},
 		"default": {

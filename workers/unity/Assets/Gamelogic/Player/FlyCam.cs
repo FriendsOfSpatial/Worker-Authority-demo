@@ -21,7 +21,7 @@ namespace Assets.Gamelogic.Player
 
         void OnEnable()
         {
-            Cursor.lockState = CursorLockMode.Locked;
+            //Cursor.lockState = CursorLockMode.Locked;
             SpectatorCamera = GameObject.Find("Main Camera");
             SpectatorCamera.transform.SetParent(this.transform);
             SpectatorCamera.transform.localPosition = Vector3.zero;
@@ -65,9 +65,12 @@ namespace Assets.Gamelogic.Player
 
         private void HandleRotationMovement()
         {
-            yaw = (yaw + Input.GetAxis("Mouse X")) % 360f;
-            pitch = (pitch - Input.GetAxis("Mouse Y")) % 360f;
-            transform.rotation = Quaternion.Euler(new Vector3(pitch, yaw, 0));
+            if (Input.GetMouseButton(1))
+            {
+                yaw = (yaw + Input.GetAxis("Mouse X")) % 360f;
+                pitch = (pitch - Input.GetAxis("Mouse Y")) % 360f;
+                transform.rotation = Quaternion.Euler(new Vector3(pitch, yaw, 0));
+            }
         }
     }
 }

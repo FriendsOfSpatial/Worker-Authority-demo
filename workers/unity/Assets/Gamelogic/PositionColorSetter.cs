@@ -55,7 +55,7 @@ public class PositionColorSetter : MonoBehaviour
         if (info == Authority.AuthorityLossImminent)
         {
             PositionColor.Update update = new PositionColor.Update();
-            update.AddLosingAuth(LosingAuthInfo.Create());
+            update.AddLosingAuth(LosingPositionAuthInfo.Create());
             PositionColorWriter.Send(update);
 
             framesBeforeAcceptAuthLoss = 5;

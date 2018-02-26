@@ -19,11 +19,13 @@ namespace Managed
 
         private static float rotationSpeed = 45f;
 
+        private int framesBeforeAcknowledgingAuthLoss = 3;
+
         private System.Collections.Generic.List<EntityId> authoritativeTurretRotations = new System.Collections.Generic.List<EntityId>();
 
         private Dictionary<EntityId, float> checkOutTurretRotations = new Dictionary<EntityId, float>();
 
-        private System.Collections.Generic.List<EntityId> entitiesToConfirmAuthorityLoss = new System.Collections.Generic.List<EntityId>();
+        private Dictionary<EntityId, int> entitiesToConfirmAuthorityLoss = new Dictionary<EntityId, int>();
 
         public TurretProcessor(uint colorId, Connection connection)
         {
@@ -45,7 +47,11 @@ namespace Managed
             }
             else if (op.Authority == Authority.AuthorityLossImminent)
             {
-                entitiesToConfirmAuthorityLoss.Add(op.EntityId);
+                var update = new Improbable.Demo.TurretInfo.Update();
+                update.AddLosingAuth(LosingTurretAuthInfo.Create());
+                connection.SendComponentUpdate(op.EntityId, update);
+
+                entitiesToConfirmAuthorityLoss[op.EntityId] = framesBeforeAcknowledgingAuthLoss;
             }
             else if (op.Authority == Authority.NotAuthoritative)
             {
@@ -86,12 +92,21 @@ namespace Managed
 
         public void Tick(float timeInMiliseconds)
         {
-            for (int i = entitiesToConfirmAuthorityLoss.Count - 1; i >= 0; --i)
+            System.Collections.Generic.List<EntityId> entitiesToAck = new System.Collections.Generic.List<EntityId>();
+
+            entitiesToAck = entitiesToConfirmAuthorityLoss.Keys.ToList();
+
+            foreach (EntityId id in entitiesToAck)
             {
-                connection.SendAuthorityLossImminentAcknowledgement<Improbable.Demo.TurretInfo>(entitiesToConfirmAuthorityLoss[i]);
-                entitiesToConfirmAuthorityLoss.RemoveAt(i);
+                --entitiesToConfirmAuthorityLoss[id];
+
+                if (entitiesToConfirmAuthorityLoss[id] <= 0)
+                {
+                    connection.SendAuthorityLossImminentAcknowledgement<Improbable.Demo.TurretInfo>(id);
+                    entitiesToConfirmAuthorityLoss.Remove(id);
+                }
             }
-                
+
             foreach (EntityId id in authoritativeTurretRotations)
             {
                 var update = new Improbable.Demo.TurretInfo.Update();
@@ -115,6 +130,7 @@ namespace Managed
             {
                 connection.SendLogMessage(LogLevel.Warn, Startup.LoggerName, string.Format("SendAndUpdateColorId to Entity {0} return was not success: {1}", op.EntityId, op.Message));
             }
+
         }
     }
 }

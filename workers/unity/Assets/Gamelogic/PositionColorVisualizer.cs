@@ -59,11 +59,11 @@ public class PositionColorVisualizer : MonoBehaviour
         SetColor();
     }
 
-    private void OnLosingAuth(LosingAuthInfo info)
+    private void OnLosingAuth(LosingPositionAuthInfo info)
     {
         if (particles != null && VisualizerSettings.Instance.UseTankPositionTransitionParticles)
         {
-            particles.Play();
+            particles.Play(false);
         }
     }
 

@@ -1,11 +1,11 @@
 package improbable.demo;
 
-type LosingAuthInfo {
+type LosingPositionAuthInfo {
 }
 
 
 component PositionColor {
   id = 2001;
   uint32 color_id = 1;
-  event LosingAuthInfo losing_auth;
+  event LosingPositionAuthInfo losing_auth;
 }

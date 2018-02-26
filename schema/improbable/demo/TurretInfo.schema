@@ -1,7 +1,11 @@
 package improbable.demo;
 
+type LosingTurretAuthInfo {
+}
+
 component TurretInfo  {
   id = 2003;
   float rotation = 1;
   uint32 color_id = 2;
+  event LosingTurretAuthInfo losing_auth;
 }

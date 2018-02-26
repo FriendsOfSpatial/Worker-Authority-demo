@@ -27,13 +27,13 @@
 	"componentSettings": {
 		"perComponentSettings": {
 			"improbable.demo.PositionColor": {
-				"authorityHandoverTimeoutMs": 1000
+				"authorityHandoverTimeoutMs": 500
 			},
 			"improbable.demo.CheckOutColor": {
-				"authorityHandoverTimeoutMs": 1000
+				"authorityHandoverTimeoutMs": 500
 			},
 			"improbable.Position": {
-				"authorityHandoverTimeoutMs": 1000
+				"authorityHandoverTimeoutMs": 500
 			}
 		},
 		"default": {
