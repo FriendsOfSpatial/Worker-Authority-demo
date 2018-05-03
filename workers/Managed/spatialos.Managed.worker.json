@@ -31,9 +31,8 @@
   "managed": {
     "windows": {
       "artifact_name": "Managed@Windows.zip",
-      "command": "mono",
+      "command": "Managed.exe",
       "arguments": [
-        "./Managed.exe",
         "receptionist",
         "${IMPROBABLE_RECEPTIONIST_HOST}",
         "${IMPROBABLE_RECEPTIONIST_PORT}",

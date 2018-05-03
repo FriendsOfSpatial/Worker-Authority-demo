@@ -28,4 +28,13 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="Managed.targets" />
+  <Target Name="AfterBuild">
+    <PropertyGroup>
+      <OutputArtifact>&quot;../../build/assembly/worker/FakeClient&quot;</OutputArtifact>
+      <!-- Avoiding shell globbing on *nix -->
+      <InputGlob>&quot;*&quot;</InputGlob>
+      <WorkerPackageCommand>spatial</WorkerPackageCommand>
+    </PropertyGroup>
+    <Exec Command="$(WorkerPackageCommand) file zip --basePath=&quot;$(TargetDir.Replace('\', '/'))&quot; --output=$(OutputArtifact) --worker_platform=$(WorkerPlatform) $(InputGlob)" />
+  </Target>
 </Project>

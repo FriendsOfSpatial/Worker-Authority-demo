@@ -1,0 +1,79 @@
+{
+  "targets": [
+    {
+      "path": "Assets/Plugins/Improbable/Sdk/Dll",
+      "type": "unity",
+      "packages": [
+        {
+          "name": "Improbable.Unity.Dependencies"
+        }
+      ]
+    },
+    {
+      "path": "Assets/Plugins/Improbable/Core/Windows/Plugins/x86",
+      "type": "worker_sdk",
+      "packages": [
+        {
+          "name": "core-dynamic-x86-win32"
+        }
+      ]
+    },
+    {
+      "path": "Assets/Plugins/Improbable/Core/Windows/Plugins/x86_64",
+      "type": "worker_sdk",
+      "packages": [
+        {
+          "name": "core-dynamic-x86_64-win32"
+        }
+      ]
+    },
+    {
+      "path": "Assets/Plugins/Improbable/Core/Linux/Plugins/x86_64",
+      "type": "worker_sdk",
+      "packages": [
+        {
+          "name": "core-dynamic-x86_64-linux"
+        }
+      ]
+    },
+    {
+      "path": "Assets/Plugins/Improbable/Core/OSX",
+      "type": "worker_sdk",
+      "packages": [
+        {
+          "name": "core-bundle-x86_64-macos"
+        }
+      ]
+    },
+    {
+      "path": "Assets/Plugins/Improbable/Sdk/Src",
+      "type": "unity",
+      "packages": [
+        {
+          "name": "Improbable.EditorTools"
+        },
+        {
+          "name": "Improbable.Unity"
+        }
+      ]
+    },
+    {
+      "path": ".spatialos/bin",
+      "type": "unity",
+      "packages": [
+        {
+          "name": "Improbable.Unity.CodeGeneration"
+        }
+      ]
+    },
+    {
+      "path": ".spatialos/generated/partials",
+      "type": "unity",
+      "packages": [
+        {
+          "name": "Improbable.UnityPartials"
+        }
+      ]
+    }
+  ]
+}
