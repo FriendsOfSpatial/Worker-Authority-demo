@@ -30,7 +30,7 @@
   <Import Project="Managed.targets" />
   <Target Name="AfterBuild">
     <PropertyGroup>
-      <OutputArtifact>&quot;../../build/assembly/worker/FakeClient&quot;</OutputArtifact>
+      <OutputArtifact>&quot;../../build/assembly/worker/Managed&quot;</OutputArtifact>
       <!-- Avoiding shell globbing on *nix -->
       <InputGlob>&quot;*&quot;</InputGlob>
       <WorkerPackageCommand>spatial</WorkerPackageCommand>
